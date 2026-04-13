@@ -67,9 +67,29 @@ struct clipboardApp: App {
 }
 
 class AppDelegate: NSObject, NSApplicationDelegate {
+    func applicationWillFinishLaunching(_ notification: Notification) {
+        NSApp.setActivationPolicy(.accessory)
+    }
+
     func applicationDidFinishLaunching(_ notification: Notification) {
         if let window = NSApplication.shared.windows.first {
             window.close()
+        }
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(windowDidBecomeKey(_:)), name: NSWindow.didBecomeKeyNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(windowWillClose(_:)), name: NSWindow.willCloseNotification, object: nil)
+    }
+    
+    @objc func windowDidBecomeKey(_ notification: Notification) {
+        if let window = notification.object as? NSWindow, window.level == .normal {
+            NSApp.setActivationPolicy(.regular)
+        }
+    }
+    
+    @objc func windowWillClose(_ notification: Notification) {
+        let visibleWindows = NSApplication.shared.windows.filter { $0.isVisible && $0.level == .normal && $0 != notification.object as? NSWindow }
+        if visibleWindows.isEmpty {
+            NSApp.setActivationPolicy(.accessory)
         }
     }
     
@@ -77,6 +97,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         if !flag {
             if let window = NSApplication.shared.windows.first {
                 window.makeKeyAndOrderFront(nil)
+                NSApp.setActivationPolicy(.regular)
             }
         }
         return true

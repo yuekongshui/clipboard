@@ -15,12 +15,10 @@ struct MenuBarExtraView: View {
                     .font(.headline)
                 Spacer()
                 Button(action: {
-                    if let url = URL(string: "x-apple.systempreferences:com.apple.preference.security?Privacy_Accessibility") {
-                        NSWorkspace.shared.open(url)
-                    }
+                    NSApplication.shared.terminate(nil)
                 }) {
-                    Image(systemName: "gearshape")
-                        .help("打开系统设置")
+                    Image(systemName: "power")
+                        .help("退出软件")
                 }
                 .buttonStyle(.plain)
                 
@@ -39,7 +37,7 @@ struct MenuBarExtraView: View {
             
             ScrollView {
                 VStack(spacing: 0) {
-                    ForEach(items.prefix(10)) { item in
+                    ForEach(items.prefix(20)) { item in
                         MenuBarItemRow(item: item)
                         Divider()
                     }
