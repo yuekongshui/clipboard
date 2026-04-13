@@ -14,13 +14,6 @@ struct MenuBarExtraView: View {
                 Text("最近记录")
                     .font(.headline)
                 Spacer()
-                Button(action: {
-                    NSApplication.shared.terminate(nil)
-                }) {
-                    Image(systemName: "power")
-                        .help("退出软件")
-                }
-                .buttonStyle(.plain)
                 
                 Button(action: {
                     openSettings()
@@ -30,6 +23,14 @@ struct MenuBarExtraView: View {
                 }
                 .buttonStyle(.plain)
                 .padding(.leading, 8)
+                
+                Button(action: {
+                    NSApplication.shared.terminate(nil)
+                }) {
+                    Image(systemName: "power")
+                        .help("退出软件")
+                }
+                .buttonStyle(.plain)
             }
             .padding()
             

@@ -1,0 +1,60 @@
+<svg width="1024" height="1024" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- Background Gradient -->
+    <linearGradient id="bgGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#4AB0E2"/>
+      <stop offset="100%" stop-color="#0066CC"/>
+    </linearGradient>
+
+    <!-- Board Gradient -->
+    <linearGradient id="boardGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#D9C5B2"/>
+      <stop offset="100%" stop-color="#BCA38F"/>
+    </linearGradient>
+
+    <!-- Clip Gradient -->
+    <linearGradient id="clipGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#F2F2F2"/>
+      <stop offset="100%" stop-color="#B3B3B3"/>
+    </linearGradient>
+
+    <!-- Drop Shadows -->
+    <filter id="shadow" x="-10%" y="-10%" width="130%" height="130%">
+      <feDropShadow dx="0" dy="15" stdDeviation="15" flood-color="#000000" flood-opacity="0.25"/>
+    </filter>
+    <filter id="lightShadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="5" stdDeviation="5" flood-color="#000000" flood-opacity="0.15"/>
+    </filter>
+    <filter id="clipShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="10" stdDeviation="8" flood-color="#000000" flood-opacity="0.3"/>
+    </filter>
+  </defs>
+
+  <!-- Base Squircle -->
+  <rect x="52" y="52" width="920" height="920" rx="210" fill="url(#bgGrad)" filter="url(#shadow)"/>
+
+  <!-- Clipboard Base -->
+  <rect x="232" y="182" width="560" height="700" rx="40" fill="url(#boardGrad)" filter="url(#shadow)"/>
+
+  <!-- Paper -->
+  <rect x="272" y="262" width="480" height="580" rx="8" fill="#FFFFFF" filter="url(#lightShadow)"/>
+
+  <!-- Paper Lines -->
+  <line x1="352" y1="362" x2="672" y2="362" stroke="#E0E0E0" stroke-width="24" stroke-linecap="round"/>
+  <line x1="352" y1="462" x2="672" y2="462" stroke="#E0E0E0" stroke-width="24" stroke-linecap="round"/>
+  <line x1="352" y1="562" x2="672" y2="562" stroke="#E0E0E0" stroke-width="24" stroke-linecap="round"/>
+  <line x1="352" y1="662" x2="542" y2="662" stroke="#E0E0E0" stroke-width="24" stroke-linecap="round"/>
+
+  <!-- Metal Clip Base -->
+  <rect x="362" y="142" width="300" height="100" rx="20" fill="url(#clipGrad)" filter="url(#clipShadow)"/>
+  
+  <!-- Metal Clip Top/Handle -->
+  <path d="M 432 102 L 592 102 A 20 20 0 0 1 612 122 L 612 142 L 412 142 L 412 122 A 20 20 0 0 1 432 102 Z" fill="#E6E6E6" filter="url(#lightShadow)"/>
+  
+  <!-- Clip Rivets -->
+  <circle cx="402" cy="192" r="12" fill="#808080"/>
+  <circle cx="622" cy="192" r="12" fill="#808080"/>
+  
+  <!-- Highlight on clip -->
+  <rect x="382" y="152" width="260" height="8" rx="4" fill="#FFFFFF" fill-opacity="0.6"/>
+</svg>
