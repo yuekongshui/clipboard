@@ -6,9 +6,17 @@ struct GeneralSettingsView: View {
 
     @ObservedObject var viewModel: SettingsViewModel
     let settings: AppSettings
+    @AppStorage("appLanguage") private var appLanguage: AppLanguage = .system
 
     var body: some View {
         Form {
+            Picker("语言", selection: $appLanguage) {
+                Text("跟随系统").tag(AppLanguage.system)
+                Text("简体中文").tag(AppLanguage.zh)
+                Text("English").tag(AppLanguage.en)
+                Text("日本語").tag(AppLanguage.ja)
+            }
+            
             Toggle("启用监听", isOn: binding(\.isMonitoringEnabled))
             Toggle("启用去重", isOn: binding(\.isDeduplicationEnabled))
 

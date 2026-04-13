@@ -111,8 +111,6 @@
 				E980958E2F8CC7DB00A5509B /* clipboard */,
 			);
 			name = clipboard;
-			packageProductDependencies = (
-			);
 			productName = clipboard;
 			productReference = E980958C2F8CC7DB00A5509B /* clipboard.app */;
 			productType = "com.apple.product-type.application";
@@ -134,8 +132,6 @@
 				E980959E2F8CC7DF00A5509B /* clipboardTests */,
 			);
 			name = clipboardTests;
-			packageProductDependencies = (
-			);
 			productName = clipboardTests;
 			productReference = E980959B2F8CC7DF00A5509B /* clipboardTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
@@ -157,8 +153,6 @@
 				E98095A82F8CC7DF00A5509B /* clipboardUITests */,
 			);
 			name = clipboardUITests;
-			packageProductDependencies = (
-			);
 			productName = clipboardUITests;
 			productReference = E98095A52F8CC7DF00A5509B /* clipboardUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
@@ -192,6 +186,8 @@
 			knownRegions = (
 				en,
 				Base,
+				"zh-Hans",
+				ja,
 			);
 			mainGroup = E98095832F8CC7DB00A5509B;
 			minimizedProjectReferenceProxies = 1;
@@ -403,7 +399,7 @@
 				ENABLE_PREVIEWS = YES;
 				ENABLE_USER_SELECTED_FILES = readonly;
 				GENERATE_INFOPLIST_FILE = YES;
-INFOPLIST_KEY_LSUIElement = YES;
+				INFOPLIST_KEY_LSUIElement = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -436,7 +432,7 @@ INFOPLIST_KEY_LSUIElement = YES;
 				ENABLE_PREVIEWS = YES;
 				ENABLE_USER_SELECTED_FILES = readonly;
 				GENERATE_INFOPLIST_FILE = YES;
-INFOPLIST_KEY_LSUIElement = YES;
+				INFOPLIST_KEY_LSUIElement = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -463,7 +459,7 @@ INFOPLIST_KEY_LSUIElement = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 82DYU8YTFB;
 				GENERATE_INFOPLIST_FILE = YES;
-INFOPLIST_KEY_LSUIElement = YES;
+				INFOPLIST_KEY_LSUIElement = YES;
 				MACOSX_DEPLOYMENT_TARGET = 26.4;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.syk.study.clipboardTests;
@@ -485,7 +481,7 @@ INFOPLIST_KEY_LSUIElement = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 82DYU8YTFB;
 				GENERATE_INFOPLIST_FILE = YES;
-INFOPLIST_KEY_LSUIElement = YES;
+				INFOPLIST_KEY_LSUIElement = YES;
 				MACOSX_DEPLOYMENT_TARGET = 26.4;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.syk.study.clipboardTests;
@@ -506,7 +502,7 @@ INFOPLIST_KEY_LSUIElement = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 82DYU8YTFB;
 				GENERATE_INFOPLIST_FILE = YES;
-INFOPLIST_KEY_LSUIElement = YES;
+				INFOPLIST_KEY_LSUIElement = YES;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.syk.study.clipboardUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -526,7 +522,7 @@ INFOPLIST_KEY_LSUIElement = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 82DYU8YTFB;
 				GENERATE_INFOPLIST_FILE = YES;
-INFOPLIST_KEY_LSUIElement = YES;
+				INFOPLIST_KEY_LSUIElement = YES;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.syk.study.clipboardUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";

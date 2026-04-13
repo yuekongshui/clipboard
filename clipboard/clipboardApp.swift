@@ -11,6 +11,7 @@ import SwiftData
 @main
 struct clipboardApp: App {
     @NSApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
+    @AppStorage("appLanguage") private var appLanguage: AppLanguage = .system
     
     var sharedModelContainer: ModelContainer = {
         let schema = Schema([
@@ -48,6 +49,7 @@ struct clipboardApp: App {
             ThemedContainerView {
                 ContentView()
             }
+            .environment(\.locale, appLanguage.locale ?? Locale.current)
         }
         .modelContainer(sharedModelContainer)
 
@@ -55,11 +57,13 @@ struct clipboardApp: App {
             ThemedContainerView {
                 SettingsView()
             }
+            .environment(\.locale, appLanguage.locale ?? Locale.current)
         }
         .modelContainer(sharedModelContainer)
         
         MenuBarExtra("Clipboard", systemImage: "doc.on.clipboard") {
             MenuBarExtraView()
+                .environment(\.locale, appLanguage.locale ?? Locale.current)
                 .modelContainer(sharedModelContainer)
         }
         .menuBarExtraStyle(.window)
