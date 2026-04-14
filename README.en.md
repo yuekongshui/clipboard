@@ -1,5 +1,7 @@
 # Clipboard
 
+English | [简体中文](README.md) | [日本語](README.ja.md)
+
 A local clipboard management macOS application based on **Swift + SwiftUI + SwiftData**.
 
 ## Core Features

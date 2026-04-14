@@ -16,7 +16,12 @@ struct MenuBarExtraView: View {
                 Spacer()
                 
                 Button(action: {
-                    openSettings()
+                    if #available(macOS 14.0, *) {
+                        NSApp.sendAction(Selector(("showSettingsWindow:")), to: nil, from: nil)
+                    } else {
+                        NSApp.sendAction(Selector(("showPreferencesWindow:")), to: nil, from: nil)
+                    }
+                    NSApp.activate(ignoringOtherApps: true)
                 }) {
                     Image(systemName: "slider.horizontal.3")
                         .help("打开软件设置")

@@ -12,7 +12,7 @@ struct RootSplitView: View {
                 .navigationSplitViewColumnWidth(min: 150, ideal: 200, max: 250)
         } content: {
             HistoryListView(queryState: $viewModel.queryState, selectedItemID: $viewModel.selectedItemID)
-                .navigationSplitViewColumnWidth(min: 800, ideal: 850, max: 1000)
+                .navigationSplitViewColumnWidth(min: 650, ideal: 700, max: 8050)
         } detail: {
             DetailView(selectedItemID: $viewModel.selectedItemID)
                 .navigationSplitViewColumnWidth(min: 400, ideal: 450)

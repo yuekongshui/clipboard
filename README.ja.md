@@ -1,5 +1,7 @@
 # Clipboard
 
+[English](README.en.md) | [简体中文](README.md) | 日本語
+
 **Swift + SwiftUI + SwiftData** に基づく、ローカルの macOS 用クリップボード管理アプリケーションです。
 
 ## 主な機能

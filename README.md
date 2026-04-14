@@ -1,5 +1,7 @@
 # Clipboard
 
+[English](README.en.md) | 简体中文 | [日本語](README.ja.md)
+
 一个基于 **Swift + SwiftUI + SwiftData** 的本地剪切板管理 macOS 应用。
 
 ## 核心功能

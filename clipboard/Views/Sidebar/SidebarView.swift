@@ -92,7 +92,20 @@ struct SidebarView: View {
             viewModel.syncFromQueryState(queryState)
         }
         .onChange(of: viewModel.selection) {
-            queryState = viewModel.applySelection(to: queryState)
+            DispatchQueue.main.async {
+                let newState = viewModel.applySelection(to: queryState)
+                if queryState != newState {
+                    queryState = newState
+                }
+            }
+        }
+        .onChange(of: queryState) {
+            DispatchQueue.main.async {
+                let newSelection = SidebarSelection.from(queryState: queryState)
+                if viewModel.selection != newSelection {
+                    viewModel.selection = newSelection
+                }
+            }
         }
     }
 }

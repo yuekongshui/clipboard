@@ -13,7 +13,7 @@ struct clipboardApp: App {
     @NSApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
     @AppStorage("appLanguage") private var appLanguage: AppLanguage = .system
     
-    var sharedModelContainer: ModelContainer = {
+    static let sharedModelContainer: ModelContainer = {
         let schema = Schema([
             ClipboardItem.self,
             Category.self,
@@ -51,7 +51,7 @@ struct clipboardApp: App {
             }
             .environment(\.locale, appLanguage.locale ?? Locale.current)
         }
-        .modelContainer(sharedModelContainer)
+        .modelContainer(Self.sharedModelContainer)
 
         Settings {
             ThemedContainerView {
@@ -59,18 +59,25 @@ struct clipboardApp: App {
             }
             .environment(\.locale, appLanguage.locale ?? Locale.current)
         }
-        .modelContainer(sharedModelContainer)
-        
-        MenuBarExtra("Clipboard", systemImage: "doc.on.clipboard") {
-            MenuBarExtraView()
-                .environment(\.locale, appLanguage.locale ?? Locale.current)
-                .modelContainer(sharedModelContainer)
-        }
-        .menuBarExtraStyle(.window)
+        .modelContainer(Self.sharedModelContainer)
+    }
+}
+
+struct PopoverRootView: View {
+    @AppStorage("appLanguage") private var appLanguage: AppLanguage = .system
+    
+    var body: some View {
+        MenuBarExtraView()
+            .environment(\.locale, appLanguage.locale ?? Locale.current)
+            .modelContainer(clipboardApp.sharedModelContainer)
     }
 }
 
 class AppDelegate: NSObject, NSApplicationDelegate {
+    var statusItem: NSStatusItem!
+    var popover: NSPopover!
+    var popoverMonitor: Any?
+
     func applicationWillFinishLaunching(_ notification: Notification) {
         NSApp.setActivationPolicy(.accessory)
     }
@@ -80,8 +87,38 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             window.close()
         }
         
+        setupPopover()
+        
         NotificationCenter.default.addObserver(self, selector: #selector(windowDidBecomeKey(_:)), name: NSWindow.didBecomeKeyNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(windowWillClose(_:)), name: NSWindow.willCloseNotification, object: nil)
+    }
+    
+    func setupPopover() {
+        let popover = NSPopover()
+        popover.contentSize = NSSize(width: 350, height: 450)
+        popover.behavior = .transient
+        
+        let contentView = PopoverRootView()
+        popover.contentViewController = NSHostingController(rootView: contentView)
+        self.popover = popover
+        
+        statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
+        if let button = statusItem.button {
+            button.image = NSImage(systemSymbolName: "doc.on.clipboard", accessibilityDescription: "Clipboard")
+            button.action = #selector(togglePopover(_:))
+            button.target = self
+        }
+    }
+    
+    @objc func togglePopover(_ sender: AnyObject?) {
+        if let button = statusItem.button {
+            if popover.isShown {
+                popover.performClose(sender)
+            } else {
+                popover.show(relativeTo: button.bounds, of: button, preferredEdge: NSRectEdge.minY)
+                NSApp.activate(ignoringOtherApps: true)
+            }
+        }
     }
     
     @objc func windowDidBecomeKey(_ notification: Notification) {
