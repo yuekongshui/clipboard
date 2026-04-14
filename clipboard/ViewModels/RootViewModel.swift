@@ -4,9 +4,6 @@ import SwiftData
 
 @MainActor
 final class RootViewModel: ObservableObject {
-    @Published var queryState: ClipboardQueryState = ClipboardQueryState()
-    @Published var selectedItemID: UUID?
-
     private let storageService = ClipboardStorageService.shared
     private let monitor = ClipboardMonitorService.shared
 

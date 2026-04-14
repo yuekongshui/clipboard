@@ -50,19 +50,13 @@ enum SidebarSelection: Hashable {
 
 @MainActor
 final class SidebarViewModel: ObservableObject {
-    @Published var selection: SidebarSelection = .type(nil)
-
     @Published var isPresentingEditor: Bool = false
     @Published var editingCategory: Category?
     @Published var deletingCategory: Category?
 
     private let storageService = ClipboardStorageService.shared
 
-    func syncFromQueryState(_ queryState: ClipboardQueryState) {
-        selection = SidebarSelection.from(queryState: queryState, currentSelection: selection)
-    }
-
-    func applySelection(to queryState: ClipboardQueryState) -> ClipboardQueryState {
+    func applySelection(_ selection: SidebarSelection, to queryState: ClipboardQueryState) -> ClipboardQueryState {
         selection.apply(to: queryState)
     }
 

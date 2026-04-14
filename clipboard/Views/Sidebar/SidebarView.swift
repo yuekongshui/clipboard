@@ -7,6 +7,7 @@ struct SidebarView: View {
 
     @Binding var queryState: ClipboardQueryState
 
+    @State private var selection: SidebarSelection = .type(nil)
     @StateObject private var viewModel = SidebarViewModel()
     private let storageService = ClipboardStorageService.shared
 
@@ -20,7 +21,7 @@ struct SidebarView: View {
     }
 
     var body: some View {
-        List(selection: $viewModel.selection) {
+        List(selection: $selection) {
             Section("快捷入口") {
                 Label("全部记录", systemImage: "tray.full")
                     .tag(SidebarSelection.all)
@@ -89,22 +90,18 @@ struct SidebarView: View {
         }
         .onAppear {
             storageService.bootstrapIfNeeded(modelContext: modelContext)
-            viewModel.syncFromQueryState(queryState)
+            selection = SidebarSelection.from(queryState: queryState, currentSelection: selection)
         }
-        .onChange(of: viewModel.selection) {
-            DispatchQueue.main.async {
-                let newState = viewModel.applySelection(to: queryState)
-                if queryState != newState {
-                    queryState = newState
-                }
+        .onChange(of: selection) { _, newValue in
+            let newState = viewModel.applySelection(newValue, to: queryState)
+            if queryState != newState {
+                queryState = newState
             }
         }
-        .onChange(of: queryState) {
-            DispatchQueue.main.async {
-                let newSelection = SidebarSelection.from(queryState: queryState, currentSelection: viewModel.selection)
-                if viewModel.selection != newSelection {
-                    viewModel.selection = newSelection
-                }
+        .onChange(of: queryState) { _, newValue in
+            let newSelection = SidebarSelection.from(queryState: newValue, currentSelection: selection)
+            if selection != newSelection {
+                selection = newSelection
             }
         }
     }
