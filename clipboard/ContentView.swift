@@ -9,8 +9,12 @@ import SwiftUI
 import SwiftData
 
 struct ContentView: View {
+    @AppStorage("isSettingsOpen") private var isSettingsOpen = false
+
     var body: some View {
         RootSplitView()
+            .disabled(isSettingsOpen)
+            .opacity(isSettingsOpen ? 0.8 : 1.0)
     }
 }
 

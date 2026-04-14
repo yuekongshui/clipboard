@@ -122,13 +122,24 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
     
     @objc func windowDidBecomeKey(_ notification: Notification) {
-        if let window = notification.object as? NSWindow, window.level == .normal {
-            NSApp.setActivationPolicy(.regular)
+        if let window = notification.object as? NSWindow {
+            if window.level == .normal || window.level == .floating {
+                NSApp.setActivationPolicy(.regular)
+            }
+            
+            // 如果主窗口被激活，尝试将设置窗口附加为子窗口，这样 macOS 就能保证其在主窗口之上
+            if window.identifier?.rawValue == "main" {
+                if let settingsWindow = NSApplication.shared.windows.first(where: { ($0.level == .normal || $0.level == .floating) && $0.identifier?.rawValue != "main" && $0.title != "" && $0.title != "clipboard" }) {
+                    if window.childWindows?.contains(where: { $0 == settingsWindow }) != true {
+                        window.addChildWindow(settingsWindow, ordered: .above)
+                    }
+                }
+            }
         }
     }
     
     @objc func windowWillClose(_ notification: Notification) {
-        let visibleWindows = NSApplication.shared.windows.filter { $0.isVisible && $0.level == .normal && $0 != notification.object as? NSWindow }
+        let visibleWindows = NSApplication.shared.windows.filter { $0.isVisible && ($0.level == .normal || $0.level == .floating) && $0 != notification.object as? NSWindow }
         if visibleWindows.isEmpty {
             NSApp.setActivationPolicy(.accessory)
         }
