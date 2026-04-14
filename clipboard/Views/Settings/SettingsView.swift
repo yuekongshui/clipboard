@@ -51,7 +51,7 @@ struct SettingsView: View {
                 w.level = .floating
                 
                 // 找到主窗口并绑定
-                if let mainWindow = NSApplication.shared.windows.first(where: { $0.identifier?.rawValue == "main" }) {
+                if let mainWindow = NSApplication.shared.windows.first(where: { $0.identifier?.rawValue == "main" || $0.title == "Clipboard" }) {
                     if mainWindow.childWindows?.contains(where: { $0 == w }) != true {
                         mainWindow.addChildWindow(w, ordered: .above)
                     }
@@ -64,7 +64,7 @@ struct SettingsView: View {
             // 确保主界面也被打开
             if let delegate = NSApp.delegate as? AppDelegate {
                 NSApp.activate(ignoringOtherApps: true)
-                if let mainWindow = NSApplication.shared.windows.first(where: { $0.identifier?.rawValue == "main" }) {
+                if let mainWindow = NSApplication.shared.windows.first(where: { $0.identifier?.rawValue == "main" || $0.title == "Clipboard" }) {
                     mainWindow.makeKeyAndOrderFront(nil)
                 }
             }

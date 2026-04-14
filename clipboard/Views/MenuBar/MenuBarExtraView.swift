@@ -18,8 +18,12 @@ struct MenuBarExtraView: View {
                 Button(action: {
                     closePopover()
                     
-                    // 同时打开主界面
-                    openWindow(id: "main")
+                    // 同时打开主界面 (检查是否存在)
+                    if let mainWindow = NSApplication.shared.windows.first(where: { $0.identifier?.rawValue == "main" || $0.title == "Clipboard" }) {
+                        mainWindow.makeKeyAndOrderFront(nil)
+                    } else {
+                        openWindow(id: "main")
+                    }
                     
                     // 打开设置界面
                     if #available(macOS 14.0, *) {
@@ -30,14 +34,13 @@ struct MenuBarExtraView: View {
                     
                     NSApp.activate(ignoringOtherApps: true)
                     
-                    // 确保设置窗口显示在最前方，且在主窗口之上
+                    // 确保设置窗口显示在主窗口上方
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
                         let windows = NSApplication.shared.windows
-                        let mainWindow = windows.first(where: { $0.identifier?.rawValue == "main" })
-                        let settingsWindow = windows.first(where: { ($0.level == .normal || $0.level == .floating) && $0.identifier?.rawValue != "main" && $0.title != "" })
+                        let mainWindow = windows.first(where: { $0.identifier?.rawValue == "main" || $0.title == "Clipboard" })
+                        let settingsWindow = windows.first(where: { ($0.level == .normal || $0.level == .floating) && $0.identifier?.rawValue != "main" && $0.title != "Clipboard" && $0.title != "" })
                         
                         mainWindow?.makeKeyAndOrderFront(nil)
-                        settingsWindow?.makeKeyAndOrderFront(nil)
                         
                         // 确保设置窗口显示在主窗口上方
                         if let main = mainWindow, let settings = settingsWindow {
@@ -78,15 +81,20 @@ struct MenuBarExtraView: View {
                 Button("更多...") {
                     closePopover()
                     
-                    openWindow(id: "main")
-                    // Bring app to front
-                    NSApp.activate(ignoringOtherApps: true)
+                    // 检查主窗口是否已存在
+                    if let mainWindow = NSApplication.shared.windows.first(where: { $0.identifier?.rawValue == "main" || $0.title == "Clipboard" }) {
+                        mainWindow.makeKeyAndOrderFront(nil)
+                        NSApp.activate(ignoringOtherApps: true)
+                    } else {
+                        openWindow(id: "main")
+                        NSApp.activate(ignoringOtherApps: true)
+                    }
                     
                     // 确保主窗口和设置窗口（如果存在）显示在最前方
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
                         let windows = NSApplication.shared.windows
-                        let mainWindow = windows.first(where: { $0.identifier?.rawValue == "main" })
-                        let settingsWindow = windows.first(where: { ($0.level == .normal || $0.level == .floating) && $0.identifier?.rawValue != "main" && $0.title != "" })
+                        let mainWindow = windows.first(where: { $0.identifier?.rawValue == "main" || $0.title == "Clipboard" })
+                        let settingsWindow = windows.first(where: { ($0.level == .normal || $0.level == .floating) && $0.identifier?.rawValue != "main" && $0.title != "Clipboard" && $0.title != "" })
                         
                         mainWindow?.makeKeyAndOrderFront(nil)
                         settingsWindow?.makeKeyAndOrderFront(nil)

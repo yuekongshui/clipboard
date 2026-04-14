@@ -45,13 +45,16 @@ struct clipboardApp: App {
     }()
 
     var body: some Scene {
-        WindowGroup(id: "main") {
+        Window("Clipboard", id: "main") {
             ThemedContainerView {
                 ContentView()
             }
             .environment(\.locale, appLanguage.locale ?? Locale.current)
         }
         .modelContainer(Self.sharedModelContainer)
+        .commands {
+            CommandGroup(replacing: .newItem) { } // 禁用 "New Window" 菜单项，确保单窗口
+        }
 
         Settings {
             ThemedContainerView {
@@ -80,11 +83,19 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
     func applicationWillFinishLaunching(_ notification: Notification) {
         NSApp.setActivationPolicy(.accessory)
+        
+        // 允许应用在前台显示并激活
+        if #available(macOS 14.0, *) {
+            NSApp.activate(ignoringOtherApps: true)
+        }
     }
 
     func applicationDidFinishLaunching(_ notification: Notification) {
-        if let window = NSApplication.shared.windows.first {
-            window.close()
+        // 关闭自动打开的主窗口（保持系统启动时不显示主界面，或者确保唯一）
+        for window in NSApplication.shared.windows {
+            if window.identifier?.rawValue == "main" || window.title == "Clipboard" {
+                window.close()
+            }
         }
         
         setupPopover()
@@ -147,7 +158,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     func applicationShouldHandleReopen(_ sender: NSApplication, hasVisibleWindows flag: Bool) -> Bool {
         if !flag {
-            if let window = NSApplication.shared.windows.first {
+            if let window = NSApplication.shared.windows.first(where: { $0.identifier?.rawValue == "main" || $0.title == "Clipboard" }) {
                 window.makeKeyAndOrderFront(nil)
                 NSApp.setActivationPolicy(.regular)
             }
