@@ -5,13 +5,13 @@ struct PrivacySettingsView: View {
     @Environment(\.modelContext) private var modelContext
 
     @ObservedObject var viewModel: SettingsViewModel
-    let settings: AppSettings
+    @Bindable var settings: AppSettings
 
     @State private var blacklistText: String = ""
 
     var body: some View {
         Form {
-            Toggle("启用敏感过滤（敏感文本默认不入库）", isOn: binding(\.isSensitiveFilterEnabled))
+            Toggle("启用敏感过滤（敏感文本默认不入库）", isOn: $settings.isSensitiveFilterEnabled)
 
             VStack(alignment: .leading, spacing: 8) {
                 Text("黑名单应用（每行一个应用名称）")
@@ -36,9 +36,5 @@ struct PrivacySettingsView: View {
         .onChange(of: settings.isSensitiveFilterEnabled) { _, _ in
             viewModel.save(modelContext: modelContext)
         }
-    }
-
-    private func binding<Value>(_ keyPath: ReferenceWritableKeyPath<AppSettings, Value>) -> Binding<Value> {
-        Binding(get: { settings[keyPath: keyPath] }, set: { settings[keyPath: keyPath] = $0 })
     }
 }

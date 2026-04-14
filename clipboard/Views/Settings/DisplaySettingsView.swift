@@ -5,7 +5,7 @@ struct DisplaySettingsView: View {
     @Environment(\.modelContext) private var modelContext
 
     @ObservedObject var viewModel: SettingsViewModel
-    let settings: AppSettings
+    @Bindable var settings: AppSettings
 
     var body: some View {
         Form {
@@ -27,7 +27,7 @@ struct DisplaySettingsView: View {
                 )
             }
 
-            Toggle("显示图片缩略图", isOn: binding(\.isImageThumbnailEnabled))
+            Toggle("显示图片缩略图", isOn: $settings.isImageThumbnailEnabled)
         }
         .formStyle(.grouped)
         .onChange(of: settings.isImageThumbnailEnabled) {
@@ -39,9 +39,5 @@ struct DisplaySettingsView: View {
         .onChange(of: settings.customThemeColorHex) {
             viewModel.save(modelContext: modelContext)
         }
-    }
-
-    private func binding<Value>(_ keyPath: ReferenceWritableKeyPath<AppSettings, Value>) -> Binding<Value> {
-        Binding(get: { settings[keyPath: keyPath] }, set: { settings[keyPath: keyPath] = $0 })
     }
 }

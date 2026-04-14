@@ -15,8 +15,12 @@ final class SettingsViewModel: ObservableObject {
         storageService.bootstrapIfNeeded(modelContext: modelContext)
     }
 
-    func save(modelContext: ModelContext) {
+    func save(modelContext: ModelContext, triggerClean: Bool = false) {
         try? modelContext.save()
+        if triggerClean {
+            let settings = storageService.getOrCreateSettings(modelContext: modelContext)
+            storageService.autoCleanIfNeeded(modelContext: modelContext, settings: settings)
+        }
     }
 
     func clearHistory(modelContext: ModelContext) {

@@ -94,15 +94,13 @@ struct SidebarView: View {
         }
         .onChange(of: selection) { _, newValue in
             let newState = viewModel.applySelection(newValue, to: queryState)
-            if queryState != newState {
-                queryState = newState
-            }
+            guard newState != queryState else { return }
+            queryState = newState
         }
         .onChange(of: queryState) { _, newValue in
             let newSelection = SidebarSelection.from(queryState: newValue, currentSelection: selection)
-            if selection != newSelection {
-                selection = newSelection
-            }
+            guard selection != newSelection else { return }
+            selection = newSelection
         }
     }
 }
