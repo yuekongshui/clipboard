@@ -8,12 +8,18 @@ enum SidebarSelection: Hashable {
     case type(ClipboardContentType?)
     case category(UUID)
 
-    static func from(queryState: ClipboardQueryState) -> SidebarSelection {
+    static func from(queryState: ClipboardQueryState, currentSelection: SidebarSelection) -> SidebarSelection {
         if queryState.favoriteFilter == .favoriteOnly && queryState.selectedCategoryID == nil && queryState.selectedType == nil {
             return .favorites
         }
         if let categoryID = queryState.selectedCategoryID {
             return .category(categoryID)
+        }
+        if queryState.selectedType == nil && queryState.favoriteFilter == .all {
+            if currentSelection == .all || currentSelection == .type(nil) {
+                return currentSelection
+            }
+            return .all
         }
         return .type(queryState.selectedType)
     }
@@ -53,7 +59,7 @@ final class SidebarViewModel: ObservableObject {
     private let storageService = ClipboardStorageService.shared
 
     func syncFromQueryState(_ queryState: ClipboardQueryState) {
-        selection = SidebarSelection.from(queryState: queryState)
+        selection = SidebarSelection.from(queryState: queryState, currentSelection: selection)
     }
 
     func applySelection(to queryState: ClipboardQueryState) -> ClipboardQueryState {
