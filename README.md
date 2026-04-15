@@ -14,7 +14,7 @@
 
 ## 技术栈
 
-* **运行平台**：macOS
+* **运行平台**：macOS 14+
 * **开发语言**：Swift
 * **UI 框架**：SwiftUI
 * **数据持久化**：SwiftData

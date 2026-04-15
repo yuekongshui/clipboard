@@ -62,7 +62,7 @@ struct SettingsView: View {
         .onAppear {
             isSettingsOpen = true
             // 确保主界面也被打开
-            if let delegate = NSApp.delegate as? AppDelegate {
+            if let _ = NSApp.delegate as? AppDelegate {
                 NSApp.activate(ignoringOtherApps: true)
                 if let mainWindow = NSApplication.shared.windows.first(where: { $0.identifier?.rawValue == "main" || $0.title == "Clipboard" }) {
                     mainWindow.makeKeyAndOrderFront(nil)

@@ -14,7 +14,7 @@ A local clipboard management macOS application based on **Swift + SwiftUI + Swif
 
 ## Tech Stack
 
-* **Platform**: macOS
+* **Platform**: macOS 14+
 * **Language**: Swift
 * **UI Framework**: SwiftUI
 * **Data Persistence**: SwiftData

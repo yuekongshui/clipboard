@@ -14,19 +14,21 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Check Package.swift
-        run: |
-          if [ ! -f Package.swift ]; then
-            echo "Package.swift not found."
-            echo "This repository is currently an Xcode project, not a Swift Package."
-            exit 1
-          fi
-
-      - name: Show Swift version
-        run: swift --version
+      - name: Show Xcode version
+        run: xcodebuild -version
 
       - name: Build
-        run: swift build -v
+        run: |
+          xcodebuild clean build \
+            -project clipboard.xcodeproj \
+            -scheme clipboard \
+            -destination 'platform=macOS' \
+            CODE_SIGNING_ALLOWED=NO
 
       - name: Test
-        run: swift test -v
+        run: |
+          xcodebuild test \
+            -project clipboard.xcodeproj \
+            -scheme clipboard \
+            -destination 'platform=macOS' \
+            CODE_SIGNING_ALLOWED=NO

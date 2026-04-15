@@ -43,7 +43,7 @@ struct MenuBarExtraView: View {
                         mainWindow?.makeKeyAndOrderFront(nil)
                         
                         // 确保设置窗口显示在主窗口上方
-                        if let main = mainWindow, let settings = settingsWindow {
+                        if let _ = mainWindow, let settings = settingsWindow {
                             // 让 settingsWindow 自己去绑定，这里仅做展示保证
                             settings.makeKeyAndOrderFront(nil)
                         }
