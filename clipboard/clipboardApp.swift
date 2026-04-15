@@ -76,32 +76,45 @@ struct PopoverRootView: View {
     }
 }
 
+@MainActor
+final class TerminationController {
+    static let shared = TerminationController()
+    private var allowTermination = false
+    
+    func requestTermination() {
+        allowTermination = true
+    }
+    
+    func consumeTerminationRequest() -> Bool {
+        defer { allowTermination = false }
+        return allowTermination
+    }
+}
+
 class AppDelegate: NSObject, NSApplicationDelegate {
     var statusItem: NSStatusItem!
     var popover: NSPopover!
     var popoverMonitor: Any?
 
     func applicationWillFinishLaunching(_ notification: Notification) {
-        NSApp.setActivationPolicy(.accessory)
-        
-        // 允许应用在前台显示并激活
-        if #available(macOS 14.0, *) {
-            NSApp.activate(ignoringOtherApps: true)
-        }
+        NSApp.setActivationPolicy(.regular)
     }
 
     func applicationDidFinishLaunching(_ notification: Notification) {
-        // 关闭自动打开的主窗口（保持系统启动时不显示主界面，或者确保唯一）
-        for window in NSApplication.shared.windows {
-            if window.identifier?.rawValue == "main" || window.title == "Clipboard" {
-                window.close()
-            }
-        }
-        
         setupPopover()
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(windowDidBecomeKey(_:)), name: NSWindow.didBecomeKeyNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(windowWillClose(_:)), name: NSWindow.willCloseNotification, object: nil)
+
+        NSApp.activate(ignoringOtherApps: true)
+    }
+
+    func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplication) -> Bool {
+        false
+    }
+
+    func applicationShouldTerminate(_ sender: NSApplication) -> NSApplication.TerminateReply {
+        if TerminationController.shared.consumeTerminationRequest() {
+            return .terminateNow
+        }
+        return .terminateCancel
     }
     
     func setupPopover() {
@@ -132,38 +145,13 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
     }
     
-    @objc func windowDidBecomeKey(_ notification: Notification) {
-        if let window = notification.object as? NSWindow {
-            if window.level == .normal || window.level == .floating {
-                NSApp.setActivationPolicy(.regular)
-            }
-            
-            // 如果主窗口被激活，尝试将设置窗口附加为子窗口，这样 macOS 就能保证其在主窗口之上
-            if window.identifier?.rawValue == "main" {
-                if let settingsWindow = NSApplication.shared.windows.first(where: { ($0.level == .normal || $0.level == .floating) && $0.identifier?.rawValue != "main" && $0.title != "" && $0.title != "clipboard" }) {
-                    if window.childWindows?.contains(where: { $0 == settingsWindow }) != true {
-                        window.addChildWindow(settingsWindow, ordered: .above)
-                    }
-                }
-            }
-        }
-    }
-    
-    @objc func windowWillClose(_ notification: Notification) {
-        let visibleWindows = NSApplication.shared.windows.filter { $0.isVisible && ($0.level == .normal || $0.level == .floating) && $0 != notification.object as? NSWindow }
-        if visibleWindows.isEmpty {
-            NSApp.setActivationPolicy(.accessory)
-        }
-    }
-    
     func applicationShouldHandleReopen(_ sender: NSApplication, hasVisibleWindows flag: Bool) -> Bool {
         if !flag {
             if let window = NSApplication.shared.windows.first(where: { $0.identifier?.rawValue == "main" || $0.title == "Clipboard" }) {
                 window.makeKeyAndOrderFront(nil)
-                NSApp.setActivationPolicy(.regular)
+                NSApp.activate(ignoringOtherApps: true)
             }
         }
         return true
     }
 }
-

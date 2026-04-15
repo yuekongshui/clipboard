@@ -56,6 +56,7 @@ struct MenuBarExtraView: View {
                 .padding(.leading, 8)
                 
                 Button(action: {
+                    TerminationController.shared.requestTermination()
                     NSApplication.shared.terminate(nil)
                 }) {
                     Image(systemName: "power")
